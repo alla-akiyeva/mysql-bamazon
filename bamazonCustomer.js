@@ -1,11 +1,11 @@
-// Then create a Node application called bamazonCustomer.js. Running this application will first display all of the items available for sale. Include the ids, names, and prices of products for sale.
+// Running this application will first display all of the items available for sale. Include the ids, names, and prices of products for sale.
 const mysql = require("mysql");
 const inquirer = require("inquirer");
 
 // The app should then prompt users with two messages.
 const connection = mysql.createConnection({
     host: "localhost",
-    port: 3307,
+    port: 3306,
     user: "root",
     password: "docker",
     database: "bamazon"
@@ -17,12 +17,13 @@ connection.connect(function(err) {
 });
 
 function start () {
-    console.log("Items available for sale: ");
+    console.log("~ Items available for sale: ~");
     connection.query("SElECT * FROM products", function(err, res) {
         if (err) throw err;
-        res.forEach(element => {
-            console.table(res);
-        });
+        // res.forEach(element => {
+        //     console.table(res);
+        // });
+        console.table(res)
         promptQns();
     });
 };
@@ -42,31 +43,21 @@ function promptQns() {
             }
             return itemArr;
             }   
-        // ["strawberries (fruit and vegetables)",
-        // "bananas (fruit and vegetables)",
-        // "tennis shoes (footwear)",
-        // "gray blazer (clothing)",
-        // "mahi mahi filets (fish)",
-        // "bok choy (fruit and vegetables)",
-        // "colgate toothpaste (toiletries)",
-        // "lavender soap (toiletries)",
-        // "brioche bread (bakery)",
-        // "chocolate croissants (bakery)"]
         }, {
         name: "units",
         type: "input",
         message: "How many units would you like to buy?",
-
         }
     ])
     .then(function(answer) {
-        console.log(results);
+        // console.log(results);
         var productChosen;
         for (let i = 0; i < results.length; i++) {
             if (results[i].item_id === answer.product) {
                 productChosen = results[i];
-                console.log(results[i]);
-                console.log(productChosen);
+                // console.log(results[i]);
+                // console.log(productChosen);
+                console.table(results);
             }
         }
         
@@ -85,23 +76,14 @@ function promptQns() {
             console.log("Insufficient quantity!");
             promptQns();
         }
-    });
-     
+    }); 
   })
 };
+
 // Please select product ID.
 // How many units of the product would you like to buy?
-
-
-
 // Once the customer has placed the order, your application should check if your store has enough of the product to meet the customer's request.
-
 // If not, the app should log a phrase like Insufficient quantity!, and then prevent the order from going through.
-
-
-
 // However, if your store does have enough of the product, you should fulfill the customer's order.
-
 // This means updating the SQL database to reflect the remaining quantity.
 // Once the update goes through, show the customer the total cost of their purchase
-
